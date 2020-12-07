@@ -7,18 +7,9 @@ object Day5 extends App {
 
   def getId(seat: String): Int = {
     val (fb, lr) = seat.splitAt(7)
-    val row      = binaryBoarding(fb, 0 to 127, "F", "B")
-    val col      = binaryBoarding(lr, 0 to 7, "L", "R")
+    val row      = Integer.parseInt(fb.replace('F', '0').replace('B', '1'), 2)
+    val col      = Integer.parseInt(lr.replace('L', '0').replace('R', '1'), 2)
     row * 8 + col
-  }
-
-  def binaryBoarding(s: String, nums: Seq[Int], top: String, bot: String): Int = {
-    val (h, t) = s.splitAt(1)
-    h match {
-      case ""    => nums.head
-      case `top` => binaryBoarding(t, nums.take(nums.size / 2), top, bot)
-      case `bot` => binaryBoarding(t, nums.drop(nums.size / 2), top, bot)
-    }
   }
 
   val ids   = input.map(getId)
