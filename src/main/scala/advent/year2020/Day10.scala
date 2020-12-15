@@ -2,7 +2,6 @@ package advent.year2020
 
 import fs2.Stream
 import scala.io.Source
-import utils.countConsecutive
 
 object Day10 extends App {
   val input = Source.fromFile("/Users/nhallstrom/Desktop/input.txt").getLines().map(_.toInt).toList.sorted
@@ -20,9 +19,11 @@ object Day10 extends App {
 
   val result =
     joltsStream
-      .through(countConsecutive(incremented))
-      .filter(_ > 1)
-      .map(a => tribonacci(a + 1))
+      .zipWithPrevious
+      .collect { case (Some(first), second) => second - first }
+      .groupAdjacentBy(i => i)
+      .collect { case (i, c) if i == 1 => c.size }
+      .map(a => tribonacci(a + 2))
       .compile
       .fold(1L)(_ * _)
 
