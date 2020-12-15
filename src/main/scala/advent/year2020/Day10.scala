@@ -18,8 +18,7 @@ object Day10 extends App {
   }
 
   val result =
-    joltsStream
-      .zipWithPrevious
+    joltsStream.zipWithPrevious
       .collect { case (Some(first), second) => second - first }
       .groupAdjacentBy(i => i)
       .collect { case (i, c) if i == 1 => c.size }
